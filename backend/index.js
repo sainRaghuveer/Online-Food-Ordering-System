@@ -3,6 +3,8 @@ const cors = require('cors');
 const { connection } = require('./configs/db');
 const { userRouter } = require('./routes/user.route');
 const { authentication } = require('./middlewares/Authentication');
+const { dishRouter } = require('./routes/dishes.route');
+const { orderRouter } = require('./routes/order.route');
 
 
 require('dotenv').config();
@@ -24,11 +26,15 @@ app.get("/", (req, res)=>{
 // user routes
 app.use("/api", userRouter);
 
-// user authentication
+// user authentication only authenticated user can make order
 app.use(authentication);
 
 //restaurant routes
-// app.use("/api", restaurantRouter);
+//Dish route
+app.use("/api", dishRouter);
+
+//order route
+app.use("/api", orderRouter);
 
 //Server
 app.listen(process.env.PORT, async()=>{
