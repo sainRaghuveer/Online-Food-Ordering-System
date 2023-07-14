@@ -131,7 +131,7 @@ The application will be accessible at http://localhost:3000.
 
 <br>
 
-<a href="">Backend deployed link</a>
+<a href="https://online-food-deliever-app-system.onrender.com/">Backend deployed link</a>
 
 <br>
 
@@ -139,7 +139,7 @@ The application will be accessible at http://localhost:3000.
 
 <br>
 
-<a href="">Frontend deployed link</a>
+<a href="https://online-food-deliever-app.vercel.app/">Frontend deployed link</a>
 
 ## Technologies Used
  - Frontend: React.js, Chakra UI
