@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
         } else {
             bcrypt.compare(password, user.password, async (err, result) => {
                 if (result) {
-                    var token = jwt.sign({ userExist: user._id }, process.env.SECRET, { expiresIn: "10h" });
+                    var token = jwt.sign({ userExist: user._id }, process.env.SECRET, { expiresIn: "30d" });
                     res.status(200).send({ "msg": "user logged in successful", "user": { name: user.name, email: user.email, _id: user._id, token:token }})
 
                 } else {

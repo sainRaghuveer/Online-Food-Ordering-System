@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text, SimpleGrid, Button, useToast, Avatar } from '@chakra-ui/react';
+import { Box, Heading, Text, SimpleGrid, Button, useToast, Avatar, Spinner } from '@chakra-ui/react';
 import {
     Table,
     Thead,
@@ -18,10 +18,16 @@ const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [orderSummary, setOrderSummary] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [dataLoading, setDataLoading] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
 
     useEffect(() => {
+       getData();
+    }, []);
+
+    const getData = ()=>{
+        setDataLoading(true);
         const user = JSON.parse(localStorage.getItem('User'));
         const token = user.user.token;
 
@@ -37,8 +43,11 @@ const Cart = () => {
             })
             .catch((error) => {
                 console.log('Error fetching cart data:', error);
+            }).finally(()=>{
+                setDataLoading(false);
             });
-    }, []);
+           
+    };
 
     const removeFromCart = (item) => {
         const updatedItems = cartItems.filter((cartItem) => cartItem._id !== item._id);
@@ -55,7 +64,7 @@ const Cart = () => {
             .then((response) => {
                 console.log(response.data);
                 toast({
-                    title: 'Remover from cart successfully!',
+                    title: 'Removed from cart successfully!',
                     status: 'success',
                     isClosable: true,
                     position: 'top',
@@ -65,7 +74,7 @@ const Cart = () => {
             .catch((error) => {
                 console.log('Error removing item from cart:', error);
                 toast({
-                    title: 'Remover from cart successfully!',
+                    title: 'Removed from cart successfully!',
                     status: 'warning',
                     isClosable: true,
                     position: 'top',
@@ -74,10 +83,37 @@ const Cart = () => {
             });
     };
 
+    const decreaseQuantity=(item)=>{
+        const user = JSON.parse(localStorage.getItem('User'));
+        const token = user.user.token;
+
+        console.log(item.dish._id)
+
+        // Fetch cart data
+        axios.patch(`/api/cart/${item.dish._id}`,{}, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+            .then((response) => {
+                toast({
+                    title: 'quantity decreased!',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top',
+                    duration: 3000,
+                });
+                getData();
+            })
+            .catch((error) => {
+                console.log('Error fetching cart data:', error);
+            });
+    }
+
     const calculateTotal = () => {
         let total = 0;
         cartItems.forEach((item) => {
-            total += item.dish.price * item.quantity;
+            total += item?.dish?.price * item?.quantity;
         });
         return total.toFixed(2);
     };
@@ -85,8 +121,8 @@ const Cart = () => {
     const checkout = () => {
         const orderData = {
             dishes: cartItems.map((item) => ({
-                dish: item.dish._id,
-                quantity: item.quantity,
+                dish: item?.dish?._id,
+                quantity: item?.quantity,
             })),
             total: calculateTotal(),
             deliveryTime: '2 Hrs',
@@ -190,20 +226,23 @@ const Cart = () => {
                 )
             ) : (
                 <>
-                    <SimpleGrid columns={2} spacing={4}>
-                        {cartItems.map((item) => (
-                            <Box key={item._id} p={4} borderWidth={1} borderRadius="md">
+                    <SimpleGrid columns={{base:1, md:2, lg:2, xl:2, "2xl":3}} spacing={4}>
+                        {dataLoading?<Spinner/>  : cartItems.map((item) => (
+                            <Box key={item?._id} p={4} borderWidth={1} borderRadius="md">
                                 <Text fontSize="xl" fontWeight="bold" mb={2}>
-                                    {item.dish.name}
+                                    {item?.dish?.name}
                                 </Text>
-                                <Text mb={2}>Quantity: {item.quantity}</Text>
+                                <Text mb={2}>Quantity: {item?.quantity}</Text>
                                 <Text color="gray.600" mb={2}>
-                                    Price: ${item.dish.price}
+                                    Price: ${item?.dish?.price}
                                 </Text>
 
                                 <Button colorScheme="red" onClick={() => removeFromCart(item)}>
                                     Remove
                                 </Button>
+                                {item.quantity>1 && <Button colorScheme="blue" onClick={() =>decreaseQuantity(item)} marginLeft="5px">
+                                    Decrease quantity
+                                </Button>}
                             </Box>
                         ))}
                     </SimpleGrid>

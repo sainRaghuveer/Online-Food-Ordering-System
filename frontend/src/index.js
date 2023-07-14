@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
-axios.defaults.baseURL="https://online-food-deliever-app-system.onrender.com"
+axios.defaults.baseURL="http://localhost:8800"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

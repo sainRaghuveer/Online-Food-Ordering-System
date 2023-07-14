@@ -51,7 +51,7 @@ const FoodOrder = () => {
         })
             .then((response) => {
                 toast({
-                    title: 'Added to cart',
+                    title: response.data.message||'Added to cart',
                     status: 'success',
                     isClosable: true,
                     position: 'top',
