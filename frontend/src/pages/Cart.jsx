@@ -27,7 +27,7 @@ const Cart = () => {
 
         // Fetch cart data
         axios
-            .get('http://localhost:8800/api/cart', {
+            .get('/api/cart', {
                 headers: {
                     Authorization: token,
                 },
@@ -47,7 +47,7 @@ const Cart = () => {
         const user = JSON.parse(localStorage.getItem('User'));
         const token = user.user.token;
         axios
-            .delete(`http://localhost:8800/api/cart/${item._id}`, {
+            .delete(`/api/cart/${item._id}`, {
                 headers: {
                     Authorization: token,
                 },
@@ -96,7 +96,7 @@ const Cart = () => {
         const token = user.user.token;
         setLoading(true);
         axios
-            .post('http://localhost:8800/api/order', orderData, {
+            .post('/api/order', orderData, {
                 headers: {
                     Authorization: token,
                 },
@@ -112,7 +112,7 @@ const Cart = () => {
 
                 // Clear the cart
                 axios
-                    .delete('http://localhost:8800/api/cart', {
+                    .delete('/api/cart', {
                         headers: {
                             Authorization: token,
                         },

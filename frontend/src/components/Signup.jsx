@@ -48,7 +48,7 @@ const Signup = () => {
             email:email,
             password:password
         }
-      const res = await axios.post(`http://localhost:8800/api/register`,obj,{
+      const res = await axios.post(`/api/register`,obj,{
         headers: {
             "Content-type": "application/json",
           },

@@ -13,7 +13,7 @@ const FoodOrder = () => {
         // Fetching dish data from the API
         const user = JSON.parse(localStorage.getItem('User'));
         const token = user.user.token;
-        axios.get('http://localhost:8800/api/dish', {
+        axios.get('/api/dish', {
             headers: {
                 Authorization: `${token}`,
             }
@@ -27,7 +27,7 @@ const FoodOrder = () => {
                 setIsLoading(false);
             });
 
-        axios.get('http://localhost:8800/api/cart', {
+        axios.get('/api/cart', {
             headers: {
                 Authorization: token,
             },
@@ -44,7 +44,7 @@ const FoodOrder = () => {
         const user = JSON.parse(localStorage.getItem('User'));
         const token = user.user.token;
 
-        axios.post('http://localhost:8800/api/cart', { dish: dish._id, deliveryTime: '2 Hrs' }, {
+        axios.post('/api/cart', { dish: dish._id, deliveryTime: '2 Hrs' }, {
             headers: {
                 Authorization: `${token}`,
             },
@@ -71,7 +71,7 @@ const FoodOrder = () => {
             })
 
         // Fetching cart data
-        axios.get('http://localhost:8800/api/cart', {
+        axios.get('/api/cart', {
             headers: {
                 Authorization: token,
             },
