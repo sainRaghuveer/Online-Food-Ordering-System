@@ -119,6 +119,12 @@ The application will be accessible at http://localhost:3000.
             <td>This endpoint should allow users delete cart data</td>
             <td>200</td>
         </tr>
+          <tr>
+            <td>PATCH</td>
+            <td>/api/cart/:id</td>
+            <td>This endpoint should allow users update quantity</td>
+            <td>200</td>
+        </tr>
         </tr>
     </tbody>
 </table>
