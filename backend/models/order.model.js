@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema({
   dishes: [
     {
       dish: { type: mongoose.Schema.Types.ObjectId, ref: 'Dish', required: true },
-      quantity: { type: Number, required: true },
+      quantity: { type: Number, default:1 },
     },
   ],
   total: { 

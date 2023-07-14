@@ -21,6 +21,8 @@ import {
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { BsFillCartFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const NavLink = ({ children }) => (
   <Link
@@ -37,37 +39,37 @@ const NavLink = ({ children }) => (
   </Link>
 );
 
-export default function Navbar() {
+export default function Navbar({cartItems}) {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [data, setData] = useState(JSON.parse(localStorage.getItem('cartData')) || []);
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('cartData')) || [];
-    setData(data);
-  }, []);
+
+  useEffect(()=>{
+    const user = JSON.parse(localStorage.getItem('User'));
+    setUser(user);
+  },[]);
 
   const handleCart = () => {
     navigate('/cart');
   };
 
-  useEffect(() => {
-    const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
-    setData(cartData);
-  }, [data.length]);
+  const handleLogout = () => {
+    localStorage.removeItem("User")
+  }
 
   return (
     <>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <Box>Logo</Box>
+          <Box>Food Restaurant</Box>
 
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               <Button onClick={handleCart}>
                 <BsFillCartFill />
-                <span>{data.length}</span>
+                <span id="navbar-cart-count">{cartItems.length>0 ? cartItems.length : 0}</span>
               </Button>
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
@@ -96,13 +98,13 @@ export default function Navbar() {
                   </Center>
                   <br />
                   <Center>
-                    <p>Username</p>
+                    <p>Name</p>
                   </Center>
                   <br />
                   <MenuDivider />
                   <MenuItem>Your Servers</MenuItem>
                   <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
+                  <Button onClick={handleLogout}>Logout</Button>
                 </MenuList>
               </Menu>
             </Stack>

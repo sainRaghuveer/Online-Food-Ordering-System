@@ -15,10 +15,8 @@ const authentication = (req, res, next) => {
                 }
             });
         } catch (error) {
-            res.status(401);
-            throw new Error("Not authorized, token failed");
+            res.status(401).send({"msg":"Not authorized, token failed", error:error.message});
         }
-
     }
 
     if (!token) {

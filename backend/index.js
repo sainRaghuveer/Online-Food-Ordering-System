@@ -5,6 +5,7 @@ const { userRouter } = require('./routes/user.route');
 const { authentication } = require('./middlewares/Authentication');
 const { dishRouter } = require('./routes/dishes.route');
 const { orderRouter } = require('./routes/order.route');
+const { cartRouter } = require('./routes/cart.route');
 
 
 require('dotenv').config();
@@ -33,8 +34,12 @@ app.use(authentication);
 //Dish route
 app.use("/api", dishRouter);
 
+//cart route
+app.use("/api", cartRouter);
+
 //order route
 app.use("/api", orderRouter);
+
 
 //Server
 app.listen(process.env.PORT, async()=>{

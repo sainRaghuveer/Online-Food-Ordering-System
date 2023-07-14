@@ -15,8 +15,7 @@ const registerUser = async (req, res) => {
     const userExists = await userModel.findOne({ email });
 
     if (userExists) {
-        res.status(400);
-        throw new Error("User already exists");
+        res.status(200).send({ "msg": "User Already Exists" });
     } else {
         bcrypt.hash(password, 5, async (err, hash) => {
             if (err) {
@@ -25,12 +24,11 @@ const registerUser = async (req, res) => {
             } else {
                 const user = new userModel({ name, email, password:hash });
                 await user.save();
-                res.status(200).send({ "msg": "User registered successful", "status": true });
+                res.status(200).send({ "msg": "User registered successful", name:user.name, email:user.email });
             }
         });
     }
 }
-
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -47,7 +45,7 @@ const loginUser = async (req, res) => {
         } else {
             bcrypt.compare(password, user.password, async (err, result) => {
                 if (result) {
-                    var token = jwt.sign({ userExist: user._id }, process.env.SECRET, { expiresIn: "3h" });
+                    var token = jwt.sign({ userExist: user._id }, process.env.SECRET, { expiresIn: "10h" });
                     res.status(200).send({ "msg": "user logged in successful", "user": { name: user.name, email: user.email, _id: user._id, token:token }})
 
                 } else {

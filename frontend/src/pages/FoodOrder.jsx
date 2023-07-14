@@ -1,11 +1,12 @@
 import { Box, Button, Heading, Image, SimpleGrid, Spinner, Text, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 
 const FoodOrder = () => {
     const [dishes, setDishes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [cartItems, setCartItems] = useState([]);
     const toast = useToast();
 
     useEffect(() => {
@@ -16,43 +17,77 @@ const FoodOrder = () => {
             headers: {
                 Authorization: `${token}`,
             }
-        }).then((data) => {
-            console.log(data)
-            setDishes(data.data);
-            setIsLoading(false);
         })
+            .then((response) => {
+                setDishes(response.data);
+                setIsLoading(false);
+            })
             .catch((error) => {
                 console.log('Error fetching dish data:', error);
                 setIsLoading(false);
             });
+
+        axios.get('http://localhost:8800/api/cart', {
+            headers: {
+                Authorization: token,
+            },
+        })
+            .then((response) => {
+                setCartItems(response.data);
+            })
+            .catch((error) => {
+                console.log('Error fetching cart data:', error);
+            });
     }, []);
 
     const handleAddToCart = (dish) => {
-        const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
+        const user = JSON.parse(localStorage.getItem('User'));
+        const token = user.user.token;
 
-        const existingItemIndex = cartData.findIndex((item) => item.dish._id === dish._id);
+        axios.post('http://localhost:8800/api/cart', { dish: dish._id, deliveryTime: '2 Hrs' }, {
+            headers: {
+                Authorization: `${token}`,
+            },
+        })
+            .then((response) => {
+                toast({
+                    title: 'Added to cart',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top',
+                    duration: 3000,
+                });
+            })
+            .catch((error) => {
+                console.log('Error adding to cart:', error);
+                toast({
+                    title: 'Error adding to cart',
+                    description: 'Please try again later.',
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top',
+                    duration: 3000,
+                });
+            })
 
-        if (existingItemIndex !== -1) {
-            // Dish already exists in cart, update quantity
-            cartData[existingItemIndex].quantity += 1;
-        } else {
-            // Dish doesn't exist in cart, add new item
-            cartData.push({ dish, quantity: 1 });
-        }
+        // Fetching cart data
+        axios.get('http://localhost:8800/api/cart', {
+            headers: {
+                Authorization: token,
+            },
+        })
+            .then((response) => {
+                setCartItems(response.data);
+            })
+            .catch((error) => {
+                console.log('Error fetching cart data:', error);
+            });
 
-        localStorage.setItem('cartData', JSON.stringify(cartData));
-        toast({
-            title: `Added to cart`,
-            status: "success",
-            isClosable: true,
-            position: "top",
-            duration: 3000
-        });
     };
 
     return (
         <>
-            <Navbar />
+            <Navbar cartItems={cartItems} />
 
             <Box p={4}>
                 <Heading as="h1" size="xl" mb={4}>
@@ -62,11 +97,11 @@ const FoodOrder = () => {
                 {isLoading ? (
                     <Spinner size="xl" />
                 ) : (
-                    <SimpleGrid columns={3} spacing={8}>
+                    <SimpleGrid columns={{ base: 1, md: 2, lg: 2, xl: 3, "2xl": 4 }} spacing={8}>
                         {dishes.map((dish) => (
                             <Box key={dish._id} p={4} borderWidth={1} borderRadius="md">
                                 <Box width="300px" margin="auto">
-                                    <Image src={dish.image} alt={dish.name} mb={4} borderRadius="md" width="300px" height="300px" />
+                                    <Image src={dish.image} alt={dish.name} mb={4} borderRadius="md" width="100%" height="250px" />
                                 </Box>
                                 <Text fontSize="xl" fontWeight="bold" mb={2}>
                                     {dish.name}
@@ -76,7 +111,9 @@ const FoodOrder = () => {
                                     Price: ${dish.price}
                                 </Text>
 
-                                <Button colorScheme="teal" onClick={() => handleAddToCart(dish)}>Add to Order</Button>
+                                <Button colorScheme="teal" onClick={() => handleAddToCart(dish)}>
+                                    Add to Order
+                                </Button>
                             </Box>
                         ))}
                     </SimpleGrid>
