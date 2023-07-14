@@ -50,12 +50,90 @@ npm start
 
 ```
 
+Note:
+- Before doing anything first create `.env` file and put `port` , `mongoURl`.> 
+- `port` is for listening the server.>
+- `mongoURl` is for running database and store your data in database so put your mongo link.>
+
 The application will be accessible at http://localhost:3000.
 
 ## Folder Structure
  - /backend: Contains the server-side code.
+
+## Endpoints
+
+<table>
+    <thead>
+        <tr>
+            <th>METHOD</th>
+            <th>ENDPOINT</th>
+            <th>DESCRIPTION</th>
+            <th>STATUS CODE</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>POST</td>
+            <td>/api/register</td>
+            <td>This endpoint should allow users to register.</td>
+            <td>200</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/login</td>
+            <td>This endpoint should allow users to login.</td>
+            <td>200</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/dish</td>
+            <td>This endpoint should allow users to view the all dished present in database.</td>
+            <td>200</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/dish</td>
+            <td>This endpoint should allow users Admin to post new dish.</td>
+            <td>200</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/order</td>
+            <td>This endpoint should allow users to post order.</td>
+            <td>200</td>
+        <tr>
+            <td>POST</td>
+            <td>/api/cart</td>
+            <td>This endpoint should allow users to add food in cart.</td>
+            <td>200</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/cart</td>
+            <td>This endpoint should allow getting all cart data.</td>
+            <td>200</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/cart</td>
+            <td>This endpoint should allow users delete cart data</td>
+            <td>200</td>
+        </tr>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+
+<a href="">Backend deployed link</a>
+
+<br>
+
  - /frontend: Contains the client-side code.
 
+<br>
+
+<a href="">Frontend deployed link</a>
 
 ## Technologies Used
  - Frontend: React.js, Chakra UI
